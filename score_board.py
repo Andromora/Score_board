@@ -29,10 +29,6 @@ class CountdownApp:
         self.setup_time = 60
         self.stop_pressed_times = 0
 
-        self.arduino = serial.Serial(comPort, 9600, timeout=2)
-        time.sleep(2) 
-        self.listen_to_arduino()
-
 
         # Frame contenedor para centrar los elementos
         self.container = tk.Frame(root)
@@ -54,13 +50,8 @@ class CountdownApp:
         self.score_two = tk.Label(second_row_frame, text=self.score_two_txt, bg='black',fg='#00e5ff')
         
         self.score_one.pack(side="left", padx=25)
-        #self.score_one.place(x=130, y=70)
         self.non_score.pack(side="left", padx=25)
         self.score_two.pack(side="left", padx=25)
-        #self.score_two.place(x=200, y=70)
-        #self.score_one.grid(row=1, column=0, sticky="e", pady=0)
-        #self.non_score.grid(row=1, column=1, sticky="w", pady=0)
-        #self.score_two.grid(row=1, column=1, sticky="w", pady=0)
 
 
         # Botón de pantalla completa
@@ -153,14 +144,8 @@ class CountdownApp:
         self.score_one_txt = self.score_to_string(self.score_one_digit)
         print("score_one_up_test")
         self.score_one.configure(text=self.score_one_txt)
-        self.arduino.write(("A" + '\n').encode('utf-8'))
         time.sleep(0.5)
         response = None
-        if self.arduino.in_waiting > 0:  # Check if there's any data coming from Arduino
-            response = self.arduino.readline().decode('utf-8').strip()
-        print("Arduino replied:", response)
-        #self.arduino.write(("A\n").encode())
-        #self.arduino.write(b"\n")
         self.stop_pressed_times = 0
     
     def score_one_down(self):
@@ -177,14 +162,8 @@ class CountdownApp:
         self.score_two_txt = self.score_to_string(self.score_two_digit)
         self.score_two.configure(text=self.score_two_txt)
         print("score_two_up_test")
-        self.arduino.write(("A" + '\n').encode('utf-8'))
         time.sleep(0.5)
         response = None
-        if self.arduino.in_waiting > 0:  # Check if there's any data coming from Arduino
-            response = self.arduino.readline().decode('utf-8').strip()
-        print("Arduino replied:", response)
-        #self.arduino.write(("A\n").encode())
-        #self.arduino.write(b"\n")
         self.stop_pressed_times = 0
     
     def score_two_down(self):
@@ -260,8 +239,6 @@ class CountdownApp:
             self.root.after(1000, self.update_clock)
         elif self.total_time == 0 and self.running:
             self.running = False
-            self.arduino.write(b"B")
-            #self.arduino.write(b"\n")
             #messagebox.showinfo("Tiempo Finalizado", "¡La cuenta regresiva ha terminado!")
 
 if __name__ == "__main__":
